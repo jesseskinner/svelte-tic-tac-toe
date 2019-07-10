@@ -2,24 +2,25 @@ export function TicTacToe({ onWin, onTie }) {
 	const board = [['', '', ''], ['', '', ''], ['', '', '']];
 
 	let turn = 'X';
+	let done = false;
 
 	return {
 		board,
 
 		click(rowIndex, columnIndex) {
-			if (!board[rowIndex][columnIndex]) {
+			if (!done && !board[rowIndex][columnIndex]) {
 				board[rowIndex][columnIndex] = turn;
 				turn = turn === 'X' ? 'O' : 'X';
 
-                if (isBoardFull(board)) {
-                    const winner = getWinner(board);
+				const winner = getWinner(board);
 
-                    if (winner) {
-                        onWin(winner);
-                    } else {
-                        onTie();
-                    }
-                }
+				if (winner) {
+					onWin(winner);
+					done = true;
+				} else if (isBoardFull(board)) {
+					onTie();
+					done = true;
+				}
 			}
 
 			return this;
